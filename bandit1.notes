@@ -1,0 +1,11 @@
+# This is a comment, so it is not part of any code. Comments list out hints. 
+## note section starts w/ challenge prompt 
+# the password for the next level is in the file with the name -
+# use single quotes to interpret the string as a literal
+
+bandit1@bandit:~$ ls
+-
+bandit1@bandit:~$ more 
+-             .bash_logout  .bashrc       .profile      
+bandit1@bandit:~$ more '-'
+rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi

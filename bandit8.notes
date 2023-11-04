@@ -1,0 +1,10 @@
+PASSWORD IS IN data.txt AND IS THE ONLY LINE THAT APPEARS ONCE
+
+bandit8@bandit:~$ uniq -c1 data.txt 
+   1001 QWiiBJhqUoMj0lCD9XNrkTM1M94eIPMV
+
+ABOVE DOESN'T WORK BECAUSE uniq ONLY COMPARES DATA LINES THAT ARE ADJACENT
+
+REAL ANSWER
+bandit8@bandit:~$ cat data.txt | sort | uniq -u
+EN632PlfYiZbn3PhVK3XOGSlNInNE00t

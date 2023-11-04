@@ -1,0 +1,167 @@
+The password for level 16 can be found by submitting the password to level 15 to port 30001 on localhost using SSL
+
+# go somewhere we have permission
+bandit15@bandit:~$ cd /tmp
+bandit15@bandit:/tmp$ mkdir gopnik
+bandit15@bandit:/tmp$ cd gopnik
+
+# use openssl to create a self-signed cert and a key for that cert
+bandit15@bandit:/tmp/gopnik$ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
+...+.....+......+.........+......+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+.....+.........+.+..+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+......+.........+.....+.+......+..............+.........+..........+...+........+.........+...+.........+................+..+......+......+..................+.+..+.........+...+...+....+......+........................+...+..+...+......+.......+........+.+......+..+............+......+....+......+............+...+.....+..........+...................................+............+.......+.....+...+..........+...+..+.......+..................+.....+.+.........+..+......+.......+...+........+...............+................+...+...........+............+.......+...+.....+...............+........................+.+.........+.........+..+...+.+...........+...+...............+....+.................................+.....+....+........+............+..........+........+..........+...+...+.................+.............+............+............+..+.+........+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+..+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*............+..+...+............+......+...+.......+...+......+...+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*.+......+.+............+..+.........+....+..+................+..+.......+.........+..+....+.........+..+.........+...+...............+.+.....+.+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Enter PEM pass phrase:
+Verifying - Enter PEM pass phrase:
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:RU
+State or Province Name (full name) [Some-State]:Moscow
+Locality Name (eg, city) []:Moscow
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:KGB
+Organizational Unit Name (eg, section) []:Leshen Squad
+Common Name (e.g. server FQDN or YOUR name) []:gopnik
+Email Address []:
+bandit15@bandit:/tmp/gopnik$ ls
+cert.pem  key.pem
+
+# Now use openssl s_client to connect with ssl
+bandit15@bandit:/tmp/gopnik$ openssl s_client -connect localhost:30001 -cert cert.pem -key key.pem -ign_eof
+Enter pass phrase for key.pem:
+CONNECTED(00000003)
+Can't use SSL_get_servername
+depth=0 CN = localhost
+verify error:num=18:self-signed certificate
+verify return:1
+depth=0 CN = localhost
+verify error:num=10:certificate has expired
+notAfter=Aug 26 18:27:26 2023 GMT
+verify return:1
+depth=0 CN = localhost
+notAfter=Aug 26 18:27:26 2023 GMT
+verify return:1
+---
+Certificate chain
+ 0 s:CN = localhost
+   i:CN = localhost
+   a:PKEY: rsaEncryption, 2048 (bit); sigalg: RSA-SHA1
+   v:NotBefore: Aug 26 18:26:26 2023 GMT; NotAfter: Aug 26 18:27:26 2023 GMT
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIDCzCCAfOgAwIBAgIEASJNqjANBgkqhkiG9w0BAQUFADAUMRIwEAYDVQQDDAls
+b2NhbGhvc3QwHhcNMjMwODI2MTgyNjI2WhcNMjMwODI2MTgyNzI2WjAUMRIwEAYD
+VQQDDAlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC5
+0ICuB4Zr7LZXKen/MfU+9Uuv36UUkCVc0e9/f5i0OxT9i4ekqOYpUPyaE3Y/Npmh
+WG+C2H/nJ33YW6ce3oRNwJhedi5sRprwOl0BTxhhhSTE3avXEWeljgo1Ic5miOeH
+imn5YpaLu+Di4iqMPjjBJTwtChUItpO80BxTIzeY9g6aqRGiZ7gHKjl6Aogse+Je
+XycIVPRj4+F3TgoR0oF92LfRCCr3bkdtWQQJPQxGl0bUG+dJaiphTaclERPb/UCf
+3gEbm3IdeS724Sa47ThyLnhZhu/ozMd7svxPWoJTjzLKHYuO+9qnr8CzxoDMV2rG
+2obWhR5QTzp57SZ3TtjJAgMBAAGjZTBjMBQGA1UdEQQNMAuCCWxvY2FsaG9zdDBL
+BglghkgBhvhCAQ0EPhY8QXV0b21hdGljYWxseSBnZW5lcmF0ZWQgYnkgTmNhdC4g
+U2VlIGh0dHBzOi8vbm1hcC5vcmcvbmNhdC8uMA0GCSqGSIb3DQEBBQUAA4IBAQBQ
+2uYSr+g3AAPbxSdqZDor/2Td0jC9aXY7D5DTBBQBT8GL84Qw1CliKgQojEmdNnT6
+zk/GR2A3SXeZJ30Cqujser91bsYBqAoK2uje8tDpF8/sCrFC+gKISrjbTXWnAo4C
+u8TSWdgYYcUOOdJOL2TDbuFNlMKNe51fd3eRrCz6z0M1iDDOAcHc5ZJxQEl7gNKq
+CXbhx4Z0FzMCsuC2Q1xRvylsVJlY9Y9i65kqfdOFElrvNtigey3sSpujRGeEFiP4
+oQvEV/07wrQ0uD5Kmx+sOLOAOM6fyJP0pf3gRqmupYVf/hnmjm3wwhXyFEGMaRY0
+8uaWJoVzQ1GtFx6JGFte
+-----END CERTIFICATE-----
+subject=CN = localhost
+issuer=CN = localhost
+---
+No client certificate CA names sent
+Peer signing digest: SHA256
+Peer signature type: RSA-PSS
+Server Temp Key: X25519, 253 bits
+---
+SSL handshake has read 1339 bytes and written 373 bytes
+Verification error: certificate has expired
+---
+New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+Server public key is 2048 bit
+Secure Renegotiation IS NOT supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+Early data was not sent
+Verify return code: 10 (certificate has expired)
+---
+---
+Post-Handshake New Session Ticket arrived:
+SSL-Session:
+    Protocol  : TLSv1.3
+    Cipher    : TLS_AES_256_GCM_SHA384
+    Session-ID: 6B95D9009E49183A1F304B4949B9D75CA2BA254850F1F9EC751C6489335A039B
+    Session-ID-ctx: 
+    Resumption PSK: 2F16E3EDC9E16C9777048E5A46218837492FC8A9132BA96435A9F3252201D9038A22E79B006D8E9CC089363F44E37E1E
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 7200 (seconds)
+    TLS session ticket:
+    0000 - 9a df 8b 94 f4 2c 9f 1b-49 94 b3 b6 72 63 95 2d   .....,..I...rc.-
+    0010 - 7e 24 05 c0 73 dd 77 16-90 d8 02 d7 eb f8 b0 2e   ~$..s.w.........
+    0020 - 3c 98 28 49 76 10 8e 33-4d 8f f9 32 ef 13 c9 79   <.(Iv..3M..2...y
+    0030 - 85 c3 a1 30 24 dc 22 b9-a1 8e ff a1 cd 78 45 10   ...0$."......xE.
+    0040 - 49 cb e9 2d 91 36 be c7-50 c8 71 91 8e 20 79 82   I..-.6..P.q.. y.
+    0050 - bb d4 e4 21 7e 23 6a fe-0a 20 cf 75 d7 40 13 2d   ...!~#j.. .u.@.-
+    0060 - 79 92 c2 35 11 a0 36 b4-1d 65 ab 03 70 9b 74 1a   y..5..6..e..p.t.
+    0070 - 3a 93 44 80 e6 98 0d 47-5f 85 a1 76 3a b2 0e 69   :.D....G_..v:..i
+    0080 - b4 16 ac d3 a0 0f 38 0a-85 67 d1 54 77 08 57 f0   ......8..g.Tw.W.
+    0090 - 4e 5c a9 dc 45 c7 9a ee-0d 19 fa c3 b2 ce ca 60   N\..E..........`
+    00a0 - 94 11 a4 8f 1a 0e 7b 39-b9 c3 46 64 cb de 55 33   ......{9..Fd..U3
+    00b0 - a6 7a c8 c9 06 52 e2 01-d4 e5 06 37 08 ea 04 1e   .z...R.....7....
+    00c0 - 34 00 4f 98 bd e9 ae 1f-8a bd 00 9e 38 53 1c 70   4.O.........8S.p
+
+    Start Time: 1693213198
+    Timeout   : 7200 (sec)
+    Verify return code: 10 (certificate has expired)
+    Extended master secret: no
+    Max Early Data: 0
+---
+read R BLOCK
+---
+Post-Handshake New Session Ticket arrived:
+SSL-Session:
+    Protocol  : TLSv1.3
+    Cipher    : TLS_AES_256_GCM_SHA384
+    Session-ID: C06756DD3E478EE1AFF6A0E58417142D5041B59C2045FB10341D747451D30E31
+    Session-ID-ctx: 
+    Resumption PSK: 5C76F039649B0DD7EF39E7E0438169DE4EC49232237CCE18C1E72D8C1D258F28596280210663B2B5DDF9360A27276BB4
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 7200 (seconds)
+    TLS session ticket:
+    0000 - 9a df 8b 94 f4 2c 9f 1b-49 94 b3 b6 72 63 95 2d   .....,..I...rc.-
+    0010 - de 10 40 20 21 71 34 33-61 a1 f7 81 91 7b 28 8d   ..@ !q43a....{(.
+    0020 - bd 8e 2d fe 83 1f bb 52-3f 2d 34 26 8a 19 0a 36   ..-....R?-4&...6
+    0030 - 66 8e 05 db 11 e6 b8 04-1b 85 19 54 4c 1b 95 ad   f..........TL...
+    0040 - e3 d6 b1 ff ca 4a 7e b0-74 6e bc d5 03 f2 bc b3   .....J~.tn......
+    0050 - 2d 91 f0 5c 8d b7 71 25-cb f7 6f 8d 9c b3 e5 87   -..\..q%..o.....
+    0060 - 75 58 f4 15 2f 26 a8 06-aa 91 6a 86 6e 5f 2f da   uX../&....j.n_/.
+    0070 - 4e 5c f6 1d 9d 4e 97 41-e2 7d e4 e0 03 b6 92 ec   N\...N.A.}......
+    0080 - cd 42 47 d9 e1 74 5a 89-34 ed 9a 7b 09 dd de 45   .BG..tZ.4..{...E
+    0090 - 20 db 2a fb c2 6e c5 bd-fc ee 87 d4 00 82 35 21    .*..n........5!
+    00a0 - 45 0d 19 6a 56 67 73 4c-60 fb cb a9 d3 aa 13 77   E..jVgsL`......w
+    00b0 - ab df c5 74 2a 28 f1 b5-26 2e b3 bf 4d ce 36 2a   ...t*(..&...M.6*
+    00c0 - 91 de 01 5b f3 a8 06 d9-0e 41 d6 be 1a 45 cc 67   ...[.....A...E.g
+
+    Start Time: 1693213198
+    Timeout   : 7200 (sec)
+    Verify return code: 10 (certificate has expired)
+    Extended master secret: no
+    Max Early Data: 0
+---
+read R BLOCK
+jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
+Correct!
+JQttfApK4SeyHwDlI9SXGR50qclOAil1
+
+closed
+bandit15@bandit:/tmp/gopnik$

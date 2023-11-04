@@ -1,0 +1,12 @@
+# the point of this level is that ls -A exposes hidden files and directories
+# A hidden file or directory on Linux, Mac, or Windows is preceded by a .
+# Customizing ls to always be ls -A is smart
+
+bandit3@bandit:~$ ls
+inhere
+bandit3@bandit:~$ cd inhere/
+bandit3@bandit:~/inhere$ ls
+bandit3@bandit:~/inhere$ ls -A
+.hidden
+bandit3@bandit:~/inhere$ more ./.hidden 
+2EW7BBsr6aMMoJ2HjW067dm8EgX26xNe

@@ -1,0 +1,6 @@
+# You can use TAB-autocomplete trick to avoid typing out the backslashes
+# The backslashes \ are space escape characters
+bandit2@bandit:~$ ls
+spaces in this filename
+# use TAB right after the word 'spaces'
+bandit2@bandit:~$ more spaces\ in\ this\ filename

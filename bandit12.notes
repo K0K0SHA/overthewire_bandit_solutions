@@ -1,0 +1,135 @@
+The password for the next level is stored in the file data.txt, which is a hexdump of a file that has been repeatedly compressed. For this level it may be useful to create a directory under /tmp in which you can work using mkdir. For example: mkdir /tmp/myname123. Then copy the datafile using cp, and rename it using mv (read the manpages!)
+
+Tried to untar the hexdump, but it didn't do anything
+bandit12@bandit:/tmp/gopnik$ ls
+copy.data  data.txt
+bandit12@bandit:/tmp/gopnik$ tar -xvf data.txt
+tar: This does not look like a tar archive
+tar: Skipping to next header
+tar: Exiting with failure status due to previous errors
+
+It's not a tar archive, it's a hexdump. A hexdump can be reversed using the xxd tool with -r flag:
+
+xxd -r data.txt
+
+Now it's showing that it's a gz archive. This requies me to append .gz to the filename.
+I'll post the transcript following.
+After reversing the hexdump, basically just use file command to check which type of archive it is.
+
+
+bandit12@bandit:/tmp/gopnik$ ls
+blyat.gz  copy.data  data.txt
+bandit12@bandit:/tmp/gopnik$ gzip --help
+Usage: gzip [OPTION]... [FILE]...
+Compress or uncompress FILEs (by default, compress FILES in-place).
+
+Mandatory arguments to long options are mandatory for short options too.
+
+  -c, --stdout      write on standard output, keep original files unchanged
+  -d, --decompress  decompress
+  -f, --force       force overwrite of output file and compress links
+  -h, --help        give this help
+  -k, --keep        keep (don't delete) input files
+  -l, --list        list compressed file contents
+  -L, --license     display software license
+  -n, --no-name     do not save or restore the original name and timestamp
+  -N, --name        save or restore the original name and timestamp
+  -q, --quiet       suppress all warnings
+  -r, --recursive   operate recursively on directories
+      --rsyncable   make rsync-friendly archive
+  -S, --suffix=SUF  use suffix SUF on compressed files
+      --synchronous synchronous output (safer if system crashes, but slower)
+  -t, --test        test compressed file integrity
+  -v, --verbose     verbose mode
+  -V, --version     display version number
+  -1, --fast        compress faster
+  -9, --best        compress better
+
+With no FILE, or when FILE is -, read standard input.
+
+Report bugs to <bug-gzip@gnu.org>.
+bandit12@bandit:/tmp/gopnik$ gzip -d blyat.gz 
+bandit12@bandit:/tmp/gopnik$ ls
+blyat  copy.data  data.txt
+bandit12@bandit:/tmp/gopnik$ file blyat 
+blyat: bzip2 compressed data, block size = 900k
+bandit12@bandit:/tmp/gopnik$ mv blyat blyat.bz
+bandit12@bandit:/tmp/gopnik$ bzip2 --help
+bzip2, a block-sorting file compressor.  Version 1.0.8, 13-Jul-2019.
+
+   usage: bzip2 [flags and input files in any order]
+
+   -h --help           print this message
+   -d --decompress     force decompression
+   -z --compress       force compression
+   -k --keep           keep (don't delete) input files
+   -f --force          overwrite existing output files
+   -t --test           test compressed file integrity
+   -c --stdout         output to standard out
+   -q --quiet          suppress noncritical error messages
+   -v --verbose        be verbose (a 2nd -v gives more)
+   -L --license        display software version & license
+   -V --version        display software version & license
+   -s --small          use less memory (at most 2500k)
+   -1 .. -9            set block size to 100k .. 900k
+   --fast              alias for -1
+   --best              alias for -9
+
+   If invoked as `bzip2', default action is to compress.
+              as `bunzip2',  default action is to decompress.
+              as `bzcat', default action is to decompress to stdout.
+
+   If no file names are given, bzip2 compresses or decompresses
+   from standard input to standard output.  You can combine
+   short flags, so `-v -4' means the same as -v4 or -4v, &c.
+
+bandit12@bandit:/tmp/gopnik$ ls
+blyat.bz  copy.data  data.txt
+bandit12@bandit:/tmp/gopnik$ bzip2 -d blyat.bz
+bandit12@bandit:/tmp/gopnik$ ls
+blyat  copy.data  data.txt
+bandit12@bandit:/tmp/gopnik$ file blyat
+blyat: gzip compressed data, was "data4.bin", last modified: Sun Apr 23 18:04:23 2023, max compression, from Unix, original size modulo 2^32 20480
+bandit12@bandit:/tmp/gopnik$ mv blyat blyat.gz
+bandit12@bandit:/tmp/gopnik$ gzip -d blyat.gz 
+bandit12@bandit:/tmp/gopnik$ ls
+blyat  copy.data  data.txt
+bandit12@bandit:/tmp/gopnik$ file blyat
+blyat: POSIX tar archive (GNU)
+bandit12@bandit:/tmp/gopnik$ mv blyat blyat.tar
+bandit12@bandit:/tmp/gopnik$ tar -xvf blyat.tar 
+data5.bin
+bandit12@bandit:/tmp/gopnik$ ls
+blyat.tar  copy.data  data5.bin  data.txt
+bandit12@bandit:/tmp/gopnik$ file data5.bin 
+data5.bin: POSIX tar archive (GNU)
+bandit12@bandit:/tmp/gopnik$ tar -xvf data5.bin
+data6.bin
+bandit12@bandit:/tmp/gopnik$ file data6.bin
+data6.bin: bzip2 compressed data, block size = 900k
+bandit12@bandit:/tmp/gopnik$ mv data6.bin data6.bz
+bandit12@bandit:/tmp/gopnik$ bzip -d data6.bz 
+Command 'bzip' not found, but there are 20 similar ones.
+bandit12@bandit:/tmp/gopnik$ bzip2 -d data6.bz 
+bandit12@bandit:/tmp/gopnik$ ls
+blyat.tar  copy.data  data5.bin  data6  data.txt
+bandit12@bandit:/tmp/gopnik$ more data6
+data8.bin0000644000000000000000000000011714421271447011254 0ustar  rootroot
+'sEddata9.bin
+             �HU(H,..�/JQ�,V(O
+O�q�p�,2qNt��I^L�H,-��7+(�-r)���uG1
+bandit12@bandit:/tmp/gopnik$ file data6
+data6: POSIX tar archive (GNU)
+bandit12@bandit:/tmp/gopnik$ mv data6 data6.tar
+bandit12@bandit:/tmp/gopnik$ tar -xvf data6.tar
+data8.bin
+bandit12@bandit:/tmp/gopnik$ file data8.bin
+data8.bin: gzip compressed data, was "data9.bin", last modified: Sun Apr 23 18:04:23 2023, max compression, from Unix, original size modulo 2^32 49
+bandit12@bandit:/tmp/gopnik$ mv data8.bin data8.gz
+bandit12@bandit:/tmp/gopnik$ gzip -d data8.gz
+bandit12@bandit:/tmp/gopnik$ ls
+blyat.tar  copy.data  data5.bin  data6.tar  data8  data.txt
+bandit12@bandit:/tmp/gopnik$ file data8
+data8: ASCII text
+bandit12@bandit:/tmp/gopnik$ more data8
+The password is wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw

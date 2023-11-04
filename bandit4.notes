@@ -1,0 +1,13 @@
+# the password is in one of those files, in one of the only human-readable strings
+# this teaches about the strings command, which can get plaintext out of otherwise nonsensical (to humans) files
+bandit4@bandit:~/inhere$ ls
+-file00  -file01  -file02  -file03  -file04  -file05  -file06  -file07  -file08  -file09
+bandit4@bandit:~/inhere$ strings ./*
+.T26 
+F8qqlY
+=>KQ
+]o-p8q
+cwk^
+lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR
+<U'=
+

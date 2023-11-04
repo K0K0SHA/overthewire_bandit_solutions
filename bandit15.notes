@@ -1,0 +1,18 @@
+The password for the bandit15 can be retrieved by submitting the password of bandit14 to port 30000 on localhost
+Hint: use netcat (nc)
+bandit14 password: fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq
+
+Solution:
+# use nc to connect to port 30000 on localhost
+bandit14@bandit:~$ nc localhost 30000
+fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq
+Correct!
+jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
+
+# one line solution
+echo 'fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq' | nc localhost 30000
+
+# what I learned
+You can use netcat to try and connect to a service on a port
+
+The password for bandit16 can be found by submitting the password for bandit15 on 30001 TCP using SSL encryption

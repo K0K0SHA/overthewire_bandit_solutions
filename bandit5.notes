@@ -1,0 +1,13 @@
+The password for the next level is stored in a file somewhere under the inhere directory and has all of the following properties:
+
+    human-readable
+    1033 bytes in size
+    not executable
+
+Exercise in find
+Pay attention to syntax. It is enough to search for a file of size 1033 bytes:
+Run find --help or read the find manpage. General syntax is find filepath <flags and arguments>
+
+bandit5@bandit:~/inhere$ more $(find . -size 1033c)
+P4L4vucdmLnm8I7Vl7jG1ApGSfjYKqJU
+                                    
