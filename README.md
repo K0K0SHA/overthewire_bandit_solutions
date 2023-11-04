@@ -2,7 +2,7 @@
 TODO: \
  [X] UPLOAD TO GITHUB \
  [ ] FINISH BANDIT RUN \
- [X] CREATE SEPARATE FILES FOR SOLUTIONS AND PROMPTS \
+ [X] CREATE SEPARATE FILES FOR SOLUTIONS AND PROMPTS 
 
  Game is played on the following server, on port 2220: \
  bandit.labs.overthewire.org 
