@@ -1,6 +1,8 @@
 The password for level 16 can be found by submitting the password to level 15 to port 30001 on localhost using SSL
 
-# go somewhere we have permission
+# password for bandit15: jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
+
+# first go somewhere on the server we have permission
 bandit15@bandit:~$ cd /tmp
 bandit15@bandit:/tmp$ mkdir gopnik
 bandit15@bandit:/tmp$ cd gopnik
@@ -165,3 +167,5 @@ JQttfApK4SeyHwDlI9SXGR50qclOAil1
 
 closed
 bandit15@bandit:/tmp/gopnik$
+
+password for bandit16 is JQttfApK4SeyHwDlI9SXGR50qclOAil1

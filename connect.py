@@ -20,6 +20,9 @@
 ##
 #	[ ]
 #	Rewrite with a def main()
+##
+#   [ ]
+#   Add a --colorless option (ask GPT)
 #########################################################################################################
 # ISSUES (tested on Windows 10 Powershell):
 #	[ ]
@@ -103,22 +106,64 @@ except Exception as E:
 
 
 # reads notes file # TODO make it read prompts and solutions separately
-notesfile = username + ".notes"
-print(color.UNDERLINE + "notes for " + username + ":" + color.END)
-with open(notesfile, 'r') as infile:
-    notes = infile.read()
-print(notes)
+
+try:
+    notesfile = username + ".notes"
+    print(color.UNDERLINE + "notes for " + username + ":" + color.END)
+    with open(notesfile, 'r') as infile:
+        notes = infile.read()
+    print(notes)
+except Exception as E:
+    print(E)
+    print("Error getting notes for:")
+    print(username)
+    confirm = input("Press Y to create new notes file for " + username + "\n")
+    if confirm == 'Y' or confirm == 'y':
+        create_notes_cmd = "touch " + username + ".notes"
+        print("executing: " + create_notes_cmd) # debug/verbosity        
+        if os.system(create_notes_cmd):
+            print("note file created:")
+            print(username + ".notes")
+
+
+# reads SSH private key (if any); this is called the identity
+identity = username + ".privatekey"
+#print(color.UNDERLINE + "SSH private key: ")
+#print(color.BOLD + identity)
 
 # reads password (if any)
 passwordfile = username + ".password"
 print(color.UNDERLINE + "password for " + username + ":" + color.END)
-with open(passwordfile, 'r') as infile:
-    password = infile.read()
-print(color.BOLD + password + color.END)
+# attempt identity connect if there's no password file but there is an ssh key
 
-url = "bandit" + level + "@bandit.labs.overthewire.org"
-port = "2220" 	# port needs to be a string and not an int for concatenation, so that os.system() can run cmdstr properly
-cmdstr = "ssh -p " + port + " " + url
+try:
+    with open(passwordfile, 'r') as infile:
+        password = infile.read()
+    print(color.BOLD + password + color.END)
+except Exception as E:
+    print("Error getting password file")
+    print(E)
 
-print("executing: " + cmdstr) # debug/verbosity
-os.system(cmdstr)
+
+def standard_connect():
+    url = "bandit" + level + "@bandit.labs.overthewire.org"
+    port = "2220" 	# port needs to be a string and not an int for concatenation, so that os.system() can run cmdstr properly
+    cmdstr = "ssh -p " + port + " " + url
+    print("executing: " + cmdstr) # debug/verbosity
+    os.system(cmdstr)
+
+def privatekey_connect():
+    print("No password file found, but identity file located:")
+    print(identity)
+    confirm = input("Press Y to confirm SSH connection with this key...\n")
+    if confirm == 'Y' or confirm == 'y':
+        url = "bandit" + level + "@bandit.labs.overthewire.org"
+        port = "2220"   # port needs to be a string and not an int for concatenation, so that os.system() can run cmdstr properly
+        cmdstr = "ssh -i " + identity + " " + "-p " + port + " " + url
+        print("executing: " + cmdstr) # debug/verbosity
+        os.system(cmdstr)
+
+if not os.path.exists(passwordfile) and os.path.exists(identity):
+    privatekey_connect()
+else:
+    standard_connect()

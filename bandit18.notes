@@ -1,0 +1,46 @@
+Once you connect to bandit17, bandit18 password is rather easy to obtain 
+There are 2 files in the homedirectory: passwords.old and passwords.new. The password for the next level is in passwords.new and is the only line that has been changed between passwords.old and passwords.new
+
+bandit17@bandit:~$ ls
+passwords.new  passwords.old
+bandit17@bandit:~$ diff passwords.new passwords.old
+42c42
+< hga5tuuCLF6fFzUpnagiMN8ssu9LFrdg
+---
+> p6ggwdNHncnmCNxuAt0KtKVq185ZU7AW
+
+bandit18 password is hga5tuuCLF6fFzUpnagiMN8ssu9LFrdg
+
+Also you can get bandit17 password while you're here, so you don't need to login with private RSA key every time:
+
+bandit17@bandit:~$ more /etc/bandit_pass/bandit17
+VwOSWtCA7lRKkTfbr2IDh6awj9RNZM5e
+
+bandit17 password is VwOSWtCA7lRKkTfbr2IDh6awj9RNZM5e
+
+Only problem is, the bandit18 .bashrc is modified so it kicks you out as soon as you ssh in. Our password is located in ~/readme
+The solution to get the bandit19 password is to pass a command with ssh. 
+This exploits the fact that .bashrc has a certain scope in Linux.
+Each user has their own .bashrc.
+
+In the following demonstration, the permissions you have depend on how the host machine has ssh configured.
+Here is how you send remote commands through ssh:
+ssh bandit18@bandit.labs.overthewire.org -p 2220 'ls; cat readme'
+
+PS E:\bandit\overthewire_bandit_solutions-main> ssh bandit18@bandit.labs.overthewire.org -p 2220 'ls; cat readme'
+                         _                     _ _ _
+                        | |__   __ _ _ __   __| (_) |_
+                        | '_ \ / _` | '_ \ / _` | | __|
+                        | |_) | (_| | | | | (_| | | |_
+                        |_.__/ \__,_|_| |_|\__,_|_|\__|
+
+
+                      This is an OverTheWire game server.
+            More information on http://www.overthewire.org/wargames
+
+bandit18@bandit.labs.overthewire.org's password:
+readme
+awhqfNnAbc1naukrpqDYcF95h7HoMTrC
+PS E:\bandit\overthewire_bandit_solutions-main>
+
+bandit19 password is awhqfNnAbc1naukrpqDYcF95h7HoMTrC

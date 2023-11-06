@@ -1,0 +1,74 @@
+A program is running automatically at regular intervals from cron, the time-based job scheduler. Look in /etc/cron.d/ for the configuration and see what command is being executed.
+
+NOTE: Looking at shell scripts written by other people is a very useful skill. The script for this level is intentionally made easy to read. If you are having problems understanding what it does, try executing it to see the debug information it prints.
+
+# So basically do the same thing I just did in the previous level (21)
+
+bandit22@bandit:~$ cd /etc/cron.d
+bandit22@bandit:/etc/cron.d$ ls
+cronjob_bandit15_root  cronjob_bandit17_root  cronjob_bandit22  cronjob_bandit23  cronjob_bandit24  cronjob_bandit25_root  e2scrub_all  otw-tmp-dir  sysstat
+
+# Now I want cronjob_bandit23
+
+bandit22@bandit:/etc/cron.d$ more cronjob_bandit23
+@reboot bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+* * * * * bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+bandit22@bandit:/etc/cron.d$
+
+# now I want /usr/bin/cronjob_bandit23.sh
+
+bandit22@bandit:/etc/cron.d$ more /usr/bin/cronjob_bandit23.sh
+#!/bin/bash
+
+myname=$(whoami)
+mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)
+
+echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
+
+cat /etc/bandit_pass/$myname > /tmp/$mytarget
+
+# reversing this is easy
+
+bandit22@bandit:/etc/cron.d$ whoami
+bandit22
+
+# cannot ls /tmp/ due to permissions
+# even if I could, it would not help because the final form of $mytarget does not have anything to identify it
+
+bandit22@bandit:/etc/cron.d$ ls /tmp | grep -i "bandit22"
+ls: cannot open directory '/tmp': Permission denied
+
+
+I wanted to see what the contents of $mytarget are, so I made a folder in /tmp/ to work with:
+
+bandit22@bandit:/etc/cron.d$ mkdir /tmp/gopnik
+bandit22@bandit:/etc/cron.d$ cd /tmp/gopnik
+bandit22@bandit:/tmp/gopnik$ nano cyka.sh
+
+bandit22@bandit:/tmp/gopnik$ more cyka.sh
+#!/bin/bash
+myname=$(whoami)
+mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)
+echo $mytarget
+
+bandit22@bandit:/tmp/gopnik$ bash ./cyka.sh
+8169b67bd894ddbb4412f91573b38db3
+
+# So now I know I need to look in /tmp/8169b67bd894ddbb4412f91573b38db3
+
+bandit22@bandit:/tmp/gopnik$ more /tmp/8169b67bd894ddbb4412f91573b38db3
+WdDozAdTM2z9DiFEQ2mGlwngMfj4EZff
+
+*WAIT A MINUTE*
+The password I found is for level 22: WdDozAdTM2z9DiFEQ2mGlwngMfj4EZff
+
+I want to run the script above with $myname = bandit23:
+
+bandit22@bandit:~$ echo I am user bandit23 | md5sum | cut -d ' ' -f 1
+8ca319486bfbbc3663ea0fbe81326349
+
+now I can find the bandit23 password:
+bandit22@bandit:~$ cat /tmp/8ca319486bfbbc3663ea0fbe81326349
+QYw0Y2aiA672PsMmh9puTQuhoz8SyR2G
+
+bandit23 password is QYw0Y2aiA672PsMmh9puTQuhoz8SyR2G
